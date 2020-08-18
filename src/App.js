@@ -36,6 +36,10 @@ const App = () => {
     setUsers(users.map((user) => (user.id === id ? updatedUser : user)))
   }
 
+  const deleteUsers = () => {
+    setUsers(users.length = 0)
+  }
+
   return (
     <div className="container">
       <h1>CRUD App with Hooks</h1>
@@ -62,6 +66,11 @@ const App = () => {
           <UserTable users={users} editRow={editRow} deleteUser={deleteUser}/>
         </div>
       </div>
+      <button
+        className="button muted-button"
+        onClick={deleteUsers}>
+          {'Delete All Users'}
+      </button>
     </div>
   )
 }
