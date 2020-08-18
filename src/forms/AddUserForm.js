@@ -9,16 +9,15 @@ const AddUserForm = (props) => {
 
         setUser( { ...user, [name]: value } )
     }
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        if (!user.name || !user.username || !user.spiritAnimal) return
+        props.addUser(user)
+        setUser(initialFormState)
+    }
     
     return (
-        <form
-            onSubmit={(event) => {
-                event.preventDefault()
-                if (!user.name || !user.username || !user.spiritAnimal) return
-                props.addUser(user)
-                setUser(initialFormState)
-            }}
-        >
+        <form onSubmit = {handleSubmit} >
             <label>Name</label>
             <input 
                 type='text'
