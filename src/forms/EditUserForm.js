@@ -33,11 +33,11 @@ const EditUserForm = (props) => {
         value={user.username}
         onChange={handleInputChange}
       />
-      <label>Spirit Animal</label>
+      <label>Age</label>
       <input
         type="text"
-        name="username"
-        value={user.spiritAnimal}
+        name="age"
+        value={user.age}
         onChange={handleInputChange}
       />
       <button>Update user</button>
