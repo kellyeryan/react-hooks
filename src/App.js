@@ -1,17 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import UserTable from './tables/UserTable'
 import AddUserForm from './forms/AddUserForm'
 import EditUserForm from './forms/EditUserForm'
+import useAsyncRequest from './hooks/useAsyncRequest'
 
 const App = () => {
 
-  const usersData = [
-    { id: 1, name: 'Tania', username: 'floppydiskette', spiritAnimal: 'horse' },
-    { id: 2, name: 'Craig', username: 'siliconeidolon', spiritAnimal: 'phoenix' },
-    { id: 3, name: 'Ben', username: 'benisphere', spiritAnimal: 'cat' },
-  ]
+  const [data, loading] = useAsyncRequest(5);
+  const [users, setUsers] = useState(null)
 
-  const [users, setUsers] = useState(usersData)
+  useEffect(() => {
+    if (data) {
+      const formattedUsers = data.map((obj) => {
+        return {
+          name: obj.name.first,
+          username: obj.login.username,
+          age: obj.registered.age,
+        };
+      });
+      setUsers(formattedUsers);
+    }
+  }, [data]);
+
   const addUser = (user) => {
     user.id = users.length + 1
     setUsers([...users, user])
@@ -21,13 +31,13 @@ const App = () => {
     setUsers(users.filter((user) => user.id !== id ))
   }
   const [editing, setEditing] = useState(false)
-  const initialFormState = { id: null, name: '', username: '', spiritAnimal: '' }
+  const initialFormState = { id: null, name: '', username: '', age: '' }
   const [currentUser, setCurrentUser] = useState(initialFormState)
 
   const editRow = (user) => {
     setEditing(true)
 
-    setCurrentUser({ id: user.id, name: user.name, username: user.username, spiritAnimal: user.spiritAnimal })
+    setCurrentUser({ id: user.id, name: user.name, username: user.username, age: user.age })
   }
 
   const updateUser = (id, updatedUser) => {
@@ -61,10 +71,14 @@ const App = () => {
           </div>
           )}
         </div>
+        {loading || !users ? (
+          <p>Loading...</p>
+        ) : (
         <div className="flex-large">
           <h2>View users</h2>
           <UserTable users={users} editRow={editRow} deleteUser={deleteUser}/>
         </div>
+      )}
       </div>
       <button
         className="button muted-button"
